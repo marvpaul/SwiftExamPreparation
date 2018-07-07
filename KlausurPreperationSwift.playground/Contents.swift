@@ -513,18 +513,58 @@ print(+++drumSet1)
 //MARK: - LV 11 Extensions and some other stuff
 //You can simply extend each class and make cool vars of functions
 extension String{
+    //Note: You can't store a stored property in extensions
+    //Using computed properties only!
+    //var greets: String = "Hallo"
     var greets: String {return "Hello, \(self)"}
-    func printEachCarInRow(){
+    func printEachCarInRow() throws{
         for i in self.characters{
             print(String(i))
         }
     }
 }
+//Some error handling
+print((try? "Marvin".greets.printEachCarInRow())!)
+do{
+    print((try? "Marvin".greets.printEachCarInRow())!)
+} catch{
+    print("Error occured")
+}
 
-print("Marvin".greets.printEachCarInRow())
 
+//Convenience and designated initializers
+//Convenience  initializers are calling other initialiazers
+class myDog{
+    var name: String
+    var length: Int
+    var height: Int
+    var friendly: Bool
+    lazy var theUltimateSecretKeyOfAllLife: Float = {
+        var myKey: Float = 0.0
+        for i in 0...100000000{
+            myKey +=  Float(i*i) / Float(i)
+        }
+        return myKey
+    }()
+    
+    //Designated initializers can call super classes initializers
+    init(length: Int, height: Int, friendly: Bool){
+        self.height = height
+        self.length = length
+        self.friendly = friendly
+        self.name = ""
+    }
+    //We have to call another initializer
+    //This initializer only takes name as argument
+    //All other vars are setted by default
+    convenience init(name: String){
+        self.init(length: 10, height: 10, friendly: true)
+         self.name = name
+    }
+}
 
 //Good to know --> Remove dublicates
 print(Array(Set(["Hello", "Hello"])))
 
-
+print("Before lazy eval")
+print(myDog.init(name: "Felix").theUltimateSecretKeyOfAllLife)
